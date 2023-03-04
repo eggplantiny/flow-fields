@@ -3,6 +3,6 @@ import { Particle } from '@/Entity/modules/Particle'
 
 export class ParticleEffect extends Effect {
   init() {
-    this.entities = Array(100).fill(0).map(() => new Particle(this))
+    this.entities = Array(1000).fill(0).map(() => new Particle(this))
   }
 }

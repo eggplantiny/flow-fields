@@ -2,17 +2,15 @@ import { Entity } from '@/Entity/Entity'
 import type { Effect } from '@/Effect/Effect'
 
 export class Circle extends Entity {
-  private x: number
-  private y: number
   private radius = 10
-  private speedX = 1
-  private speedY = 1
+  private speedX = Math.random() * 2 - 1
+  private speedY = Math.random() * 2 - 1
 
   constructor(effect: Effect) {
-    super(effect)
+    const x = Math.floor(Math.random() * effect.width)
+    const y = Math.floor(Math.random() * effect.height)
 
-    this.x = Math.floor(Math.random() * this.effect.width)
-    this.y = Math.floor(Math.random() * this.effect.height)
+    super(effect, x, y)
   }
 
   public update() {

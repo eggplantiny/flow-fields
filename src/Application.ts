@@ -1,6 +1,6 @@
 import { ParticleEffect } from '@/Effect/modules/ParticleEffect'
 import type { Effect } from '@/Effect/Effect'
-import { CircleEffect } from '@/Effect/modules/CircleEffect'
+import { DisplayEffect } from '@/Effect/modules/DisplayEffect'
 
 export class Application {
   private root: HTMLDivElement
@@ -24,7 +24,8 @@ export class Application {
     window.addEventListener('resize', () => this.resize())
 
     this.effects.push(new ParticleEffect(this.canvas.width, this.canvas.height))
-    this.effects.push(new CircleEffect(this.canvas.width, this.canvas.height))
+    this.effects.push(new DisplayEffect(this.canvas.width, this.canvas.height))
+    // this.effects.push(new CircleEffect(this.canvas.width, this.canvas.height))
     this.effects.forEach(effect => effect.init())
   }
 
@@ -33,14 +34,29 @@ export class Application {
     this.canvas.height = this.root.clientHeight
   }
 
-  public run() {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+  private update() {
     this.effects.forEach((effect) => {
       effect.update()
+    })
+  }
+
+  private animate() {
+    this.effects.forEach((effect) => {
       effect.render(this.context)
     })
+  }
 
-    this.raiId = requestAnimationFrame(() => this.run())
+  private tick() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+
+    this.update()
+    this.animate()
+
+    this.raiId = requestAnimationFrame(this.tick.bind(this))
+  }
+
+  public run() {
+    this.tick()
   }
 
   public destroy() {

@@ -1,5 +1,9 @@
 import '@/assets/styles/style.css'
 import { Application } from '@/Application'
 
-const app = new Application('#app')
-app.run()
+function createApp() {
+  return new Application('#app')
+}
+
+createApp()
+  .run()
