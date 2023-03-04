@@ -10,6 +10,8 @@ export class Application {
 
   private effects: Effect[] = []
 
+  private tickIndex = 0
+
   constructor(selector: string) {
     this.root = document.querySelector<HTMLDivElement>(selector)!
     this.canvas = document.createElement('canvas')
@@ -25,7 +27,7 @@ export class Application {
 
     this.effects.push(new ParticleEffect(this.canvas.width, this.canvas.height))
     this.effects.push(new DisplayEffect(this.canvas.width, this.canvas.height))
-    // this.effects.push(new CircleEffect(this.canvas.width, this.canvas.height))
+
     this.effects.forEach(effect => effect.init())
   }
 
@@ -35,7 +37,10 @@ export class Application {
   }
 
   private update() {
+    this.tickIndex += 1
+
     this.effects.forEach((effect) => {
+      effect.tick(this.tickIndex)
       effect.update()
     })
   }

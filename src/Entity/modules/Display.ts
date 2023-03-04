@@ -6,7 +6,7 @@ export class DisplayEntity extends Entity {
     const x = (index % effect.cols) * effect.cellSize
     const y = Math.floor(index / effect.cols) * effect.cellSize
 
-    super(effect, x, y)
+    super(effect, index, x, y)
   }
 
   public update() {
@@ -22,11 +22,11 @@ export class DisplayEntity extends Entity {
 
     context.fillStyle = '#f2f2f2'
     context.strokeStyle = '#f2f2f2'
-    context.font = '8px Arial'
+    context.font = '7px Arial'
     context.textAlign = 'center'
     context.textBaseline = 'middle'
 
     context.fillText(this.effect.flowField[index].toFixed(1), this.x + this.effect.cellSize / 2, this.y + this.effect.cellSize / 2)
-    context.strokeRect(this.x, this.y, this.effect.cellSize, this.effect.cellSize)
+    context.strokeRect(this.x + 1, this.y + 1, this.effect.cellSize - 2, this.effect.cellSize - 2)
   }
 }

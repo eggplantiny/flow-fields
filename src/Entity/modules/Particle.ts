@@ -10,11 +10,11 @@ export class Particle extends Entity {
 
   private maxLength = Math.floor(Math.random() * 200 + 10)
 
-  constructor(effect: Effect) {
+  constructor(effect: Effect, index: number) {
     const x = Math.floor(Math.random() * effect.width)
     const y = Math.floor(Math.random() * effect.height)
 
-    super(effect, x, y)
+    super(effect, index, x, y)
   }
 
   public update() {
@@ -22,20 +22,18 @@ export class Particle extends Entity {
     const y = Math.floor(this.y / this.effect.cellSize)
     const index = y * this.effect.cols + x
 
-    this.angle += this.effect.flowField[index]
+    this.angle = this.effect.flowField[index]
 
-    this.speedX += Math.cos(this.angle)
-    this.speedY += Math.sin(this.angle)
+    this.speedX = Math.cos(this.angle)
+    this.speedY = Math.sin(this.angle)
     this.x += this.speedX
     this.y += this.speedY
 
-    if (this.x < 0 || this.x > this.effect.width)
-      this.speedX *= -1
+    if (this.isInBounds())
+      this.history.push({ x: this.x, y: this.y })
+    else
+      this.history.shift()
 
-    if (this.y < 0 || this.y > this.effect.height)
-      this.speedY *= -1
-
-    this.history.push({ x: this.x, y: this.y })
     if (this.history.length > this.maxLength)
       this.history.shift()
   }

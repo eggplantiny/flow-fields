@@ -20,23 +20,28 @@ export abstract class Effect {
     this._init()
   }
 
+  public abstract tick(tickIndex: number): void
+
   public update() {
     this.entities.forEach((entity) => {
       entity.update()
     })
+
+    this.entities = this.entities.filter(entity => entity.isInBounds() && entity.hasHistory)
   }
 
-  private _init() {
+  protected reflowField() {
     this.flowField = []
-
     for (let y = 0; y < this.rows; y += 1) {
       for (let x = 0; x < this.cols; x += 1) {
-        const angle = Math.cos(x) + Math.sin(y)
+        const angle = (Math.cos(x) + Math.sin(y)) * Math.random()
         this.flowField.push(angle)
       }
     }
+  }
 
-    console.log(this.flowField)
+  private _init() {
+    this.reflowField()
   }
 
   public abstract init(): void
