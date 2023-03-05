@@ -1,5 +1,7 @@
 import type { Entity } from '@/Entity/Entity'
 
+const DEBUD = false
+
 export abstract class Effect {
   public width: number
   public height: number
@@ -92,8 +94,11 @@ export abstract class Effect {
   }
 
   public render(context: CanvasRenderingContext2D) {
-    // this.drawGrid(context)
-    // this.drawFlowField(context)
+    if (DEBUD) {
+      this.drawGrid(context)
+      this.drawFlowField(context)
+    }
+
     this.entities.forEach((entity) => {
       entity.draw(context)
     })
