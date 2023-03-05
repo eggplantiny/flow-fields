@@ -3,9 +3,6 @@ import { Entity } from '@/Entity/Entity'
 import { randomRangeFloat, randomRangeInt } from '@/Utils/random'
 
 export class Particle extends Entity {
-  private width = 1
-  private height = 1
-
   private hue: number
   private deltaX: number
   private deltaY: number
