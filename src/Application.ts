@@ -31,8 +31,8 @@ export class Application {
   }
 
   private resize() {
-    this.canvas.width = this.root.clientWidth
-    this.canvas.height = this.root.clientHeight
+    this.canvas.width = window.innerWidth
+    this.canvas.height = window.innerHeight
 
     this.effects.forEach((effect) => {
       effect.width = this.canvas.width
