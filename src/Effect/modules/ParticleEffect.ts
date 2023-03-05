@@ -1,13 +1,16 @@
 import { Effect } from '@/Effect/Effect'
 import { Particle } from '@/Entity/modules/Particle'
 
+const ENTITY_COUNT = 1000
+
 export class ParticleEffect extends Effect {
   init() {
-    this.entities = Array(10000).fill(0).map((_, index) => new Particle(this, index))
+    this.reflowField()
+    this.entities = Array(ENTITY_COUNT).fill(0).map((_, index) => new Particle(this, index))
   }
 
-  tick(tickIndex: number) {
-    if (tickIndex % 10 === 0)
-      this.reflowField()
+  tick() {
+    const destroyedCount = ENTITY_COUNT - this.entities.length
+    this.entities.push(...Array(destroyedCount).fill(0).map((_, index) => new Particle(this, index)))
   }
 }

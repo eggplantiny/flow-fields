@@ -1,6 +1,5 @@
 import { ParticleEffect } from '@/Effect/modules/ParticleEffect'
 import type { Effect } from '@/Effect/Effect'
-import { DisplayEffect } from '@/Effect/modules/DisplayEffect'
 
 export class Application {
   private root: HTMLDivElement
@@ -26,7 +25,7 @@ export class Application {
     window.addEventListener('resize', () => this.resize())
 
     this.effects.push(new ParticleEffect(this.canvas.width, this.canvas.height))
-    this.effects.push(new DisplayEffect(this.canvas.width, this.canvas.height))
+    // this.effects.push(new DisplayEffect(this.canvas.width, this.canvas.height))
 
     this.effects.forEach(effect => effect.init())
   }
@@ -34,6 +33,12 @@ export class Application {
   private resize() {
     this.canvas.width = this.root.clientWidth
     this.canvas.height = this.root.clientHeight
+
+    this.effects.forEach((effect) => {
+      effect.width = this.canvas.width
+      effect.height = this.canvas.height
+      effect.init()
+    })
   }
 
   private update() {

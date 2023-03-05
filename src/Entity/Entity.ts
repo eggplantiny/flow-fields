@@ -1,4 +1,6 @@
 import type { Effect } from '@/Effect/Effect'
+import { LinkedList } from '@/Utils/List/LinkedList'
+import { randomRangeInt } from '@/Utils/random'
 
 export interface Position {
   x: number
@@ -8,7 +10,8 @@ export interface Position {
 export abstract class Entity {
   protected index: number
   protected effect: Effect
-  protected history: Position[] = []
+  protected history = new LinkedList<Position>()
+  // protected history: Position[]
 
   protected x: number
   protected y: number
@@ -18,6 +21,7 @@ export abstract class Entity {
     this.x = x
     this.y = y
     this.index = index
+    // this.history = []
 
     this.history.push({ x, y })
   }
@@ -27,9 +31,14 @@ export abstract class Entity {
   }
 
   public abstract update(): void
+  public reset() {
+    this.x = randomRangeInt(0, this.effect.width)
+    this.y = randomRangeInt(0, this.effect.height)
+    this.history.clear()
+  }
   public abstract draw(context: CanvasRenderingContext2D): void
 
   public get hasHistory() {
-    return this.history.length >= 0
+    return this.history.length > 0
   }
 }

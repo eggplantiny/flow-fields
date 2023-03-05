@@ -1,20 +1,30 @@
 import type { Effect } from '@/Effect/Effect'
 import { Entity } from '@/Entity/Entity'
+import { randomRangeFloat, randomRangeInt } from '@/Utils/random'
 
 export class Particle extends Entity {
   private width = 1
   private height = 1
-  private speedX = Math.random() * 2 - 1
-  private speedY = Math.random() * 2 - 1
-  private angle = Math.random() * Math.PI * 2
 
-  private maxLength = Math.floor(Math.random() * 200 + 10)
+  private hue: number
+  private deltaX: number
+  private deltaY: number
+
+  private speed: number
+  private angle: number
+
+  private maxLength = 50
 
   constructor(effect: Effect, index: number) {
-    const x = Math.floor(Math.random() * effect.width)
-    const y = Math.floor(Math.random() * effect.height)
+    const x = randomRangeInt(0, effect.width)
+    const y = randomRangeInt(0, effect.height)
 
     super(effect, index, x, y)
+    this.hue = randomRangeInt(0, 360)
+    this.speed = randomRangeFloat(5, 15)
+    this.deltaX = 1
+    this.deltaY = 1
+    this.angle = 0
   }
 
   public update() {
@@ -24,10 +34,11 @@ export class Particle extends Entity {
 
     this.angle = this.effect.flowField[index]
 
-    this.speedX = Math.cos(this.angle)
-    this.speedY = Math.sin(this.angle)
-    this.x += this.speedX
-    this.y += this.speedY
+    this.deltaX = Math.cos(this.angle) * this.speed
+    this.deltaY = Math.sin(this.angle) * this.speed
+    this.x += this.deltaX
+    this.y += this.deltaY
+    this.hue = 180 - (this.history.length / this.maxLength) * 360
 
     if (this.isInBounds())
       this.history.push({ x: this.x, y: this.y })
@@ -39,13 +50,17 @@ export class Particle extends Entity {
   }
 
   public draw(context: CanvasRenderingContext2D) {
-    context.fillStyle = '#f2f2f2'
-    context.strokeStyle = '#f2f2f2'
+    // context.fillStyle = '#f2f2f2'
+    // context.fillRect(this.x, this.y, this.width, this.height)
+    context.strokeStyle = `hsl(${this.hue}, 50%, 50%)`
+    const first = this.history.first()
+    // const first = this.history[0]
 
-    context.fillRect(this.x, this.y, this.width, this.height)
+    if (!first)
+      return
 
     context.beginPath()
-    context.moveTo(this.history[0].x, this.history[0].y)
+    context.moveTo(first.x, first.y)
     for (const { x, y } of this.history)
       context.lineTo(x, y)
 
